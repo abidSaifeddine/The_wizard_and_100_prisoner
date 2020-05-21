@@ -244,14 +244,15 @@
             },
             //hide the Overlay Message
             hide: function (days) {
-                if(days===0)
-                this.show = false;
+                if (days === 0)
+                    this.show = false;
             }
         },
 
         created() {
             //Preventing the user from screening the application code
-            // console.log = function () { }
+            console.log = function () {
+            }
         }
     }
 </script>

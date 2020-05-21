@@ -23,9 +23,9 @@
             currentContent: {},
             currentImage: {}
         },
-        methods:{
+        methods: {
             //send an event to show the hints to the user, the event will be received in App.vue
-            showHint: function(){
+            showHint: function () {
                 EventBus.$emit('showHint');
             }
         }
@@ -78,7 +78,6 @@
     #steps-container h3 {
         margin: 0;
     }
-
 
 
 </style>
