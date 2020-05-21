@@ -102,6 +102,7 @@
             let self = this;
             //Listening for showHint event to show hints to the user
             EventBus.$on('showHint', function () {
+                EventBus.$emit('days', 0);
                 //user is only allowed 3 hints
                 if (self.hint_count < 3) {
                     //The hints's content in the contents array starts from index 5
@@ -117,6 +118,7 @@
             });
             //Listening for the submit event to be triggered
             EventBus.$on('submit', function (args) {
+                self.releaseCalled = false;
                 //The counter hidden of the user to prevent him from cheating
                 let the_game_s_counter = 0;
                 //Holding days that prisoner have been in captivity
@@ -156,11 +158,11 @@
                      * if the_game_s_counter variables is greater than 198 ==> something is wrong
                      */
                     if (the_game_s_counter === 198 && prisoners.every((e) => e.switched === true)) {
-                        self.content = `your friends survived in ${days} days`;
+                        self.content = `your friends survived in`;
                     } else if (the_game_s_counter <= 198 && prisoners.every((e) => e.switched === true)) {
                         self.content = `You cheated!!!`;
                     } else if (the_game_s_counter < 198) {
-                        self.content = `your friends died in ${days} days`;
+                        self.content = `your friends died in`;
                     } else if (the_game_s_counter > 198) {
                         self.content = 'Either you cheated or your strategy is wrong';
                     }
@@ -169,11 +171,11 @@
                     self.show = true;
                 }
 
-              //init prisoners array
+                //init prisoners array
                 let prisoners = [];
-              //holding the switch's status
+                //holding the switch's status
                 let _switch = false;
-              //filling the prisoners array with prisoners
+                //filling the prisoners array with prisoners
                 for (let i = 0; i < 100; i++) {
                     let prisoner = {
                         'index': i,
@@ -189,58 +191,66 @@
                 eval(args.variables);
                 // end user's variables
 
-              //Loop, one iteration each 10 milliseconds // random prisoner
+                //Loop, one iteration each 10 milliseconds // random prisoner
                 const prisonersLoop = setInterval(function () {
-              //120.000 * 10 milliseconds = 1.200.000 milliseconds = 20minutes
-                  // if after 20 minutes the release function is never called, the system will break;
+                    //stopping the loop when the release function is called
+                    if (self.releaseCalled) clearInterval(prisonersLoop);
+
+                    //120.000 * 10 milliseconds = 1.200.000 milliseconds = 20minutes
+                    // if after 20 minutes the release function is never called, the system will break;
                     if (days === 120000) {
                         clearInterval(prisonersLoop);
                         self.image_src = contents[0].src;
                         self.content = `Timeout, you never asked the question`;
                         self.show = true;
                     }
-                  //randomly picking a prisoner
+
+                    //randomly picking a prisoner
                     let prisonerIndex = Math.floor(Math.random() * Math.floor(100));
+
                     // eslint-disable-next-line no-unused-vars
                     let prisonerInRoom = prisoners[prisonerIndex];
+
                     days++;
-                    console.log(prisonerIndex, the_game_s_counter);
+                    //update the ui with the days count
+                    EventBus.$emit('days', days);
+                    console.log(prisonerIndex, the_game_s_counter, days);
+
                     //eval user's code
                     try {
                         eval(args.code);
                     } catch (e) {
-                        if (e instanceof SyntaxError) {
-                            alert(e.message);
+                        //check for user's code errors
+                        if (e instanceof SyntaxError || e instanceof EvalError || e instanceof RangeError || e instanceof ReferenceError) {
+                            self.show = false;
                             clearInterval(prisonersLoop);
+                            alert(e.message);
                         }
                     }
                     //end user's code
 
-                  //stopping the loop when the release function is called
-                    if (self.releaseCalled) clearInterval(prisonersLoop);
+
                 }, 10);
 
 
             });
-            //Hide overlayMessage
-            EventBus.$on('hide', function () {
-                self.show = false;
-            });
+
         },
         methods: {
-          //Change the content of the header component depending on the step hovered over
+            //Change the content of the header component depending on the step hovered over
             revealContent: function (index) {
                 this.currentContent = contents[index].title;
                 this.currentImage = contents[index].src;
             },
-          //hide the Overlay Message
-            hide: function () {
+            //hide the Overlay Message
+            hide: function (days) {
+                if(days===0)
                 this.show = false;
             }
         },
 
         created() {
-          //Preventing the user from screening the application code
+            //Preventing the user from screening the application code
             // console.log = function () { }
         }
     }

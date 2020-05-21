@@ -1,12 +1,13 @@
 <template>
     <div v-if="show">
 
-        <div class="modal-overlay" id="modal-overlay" v-on:click="hide"></div>
+        <div class="modal-overlay" id="modal-overlay" v-on:click="hide(days)"></div>
 
         <div class="modal" id="modal">
             <div class="modal-content">
                 <div class="bubble bubble-bottom-left">
-                    {{ content }}
+                    {{ content }} <p v-show="days>0">{{days}} days</p>
+                    <button id="close" v-if="showClose" v-on:click="hide(0)">X</button>
                 </div>
                 <img v-bind:src="image_src" alt="">
 
@@ -16,16 +17,47 @@
     </div>
 </template>
 <script>
+
     /**
      * a component to display messages to the user either for the game results or for the hints
      */
+
+    import EventBus from "@/components/EventBus";
+
     export default {
         name: 'OverlayMessage',
         props: {
             content: {},
             hide: {},
             image_src: {},
-            show: {}
+            show: {},
+        },
+        data() {
+            return {
+                days: 0,
+                showClose: false
+            }
+        },
+        created() {
+            //update the days counter
+            EventBus.$on('days', (days) => {
+                this.days = days;
+                this.showClose = false;
+            });
+        },
+        watch: {
+            //Show close button when result comes out
+            content: function (newValue) {
+                if (
+                    ["Timeout, you never asked the question",
+                        "Either you cheated or your strategy is wrong",
+                        "your friends died in",
+                        "You cheated!!!",
+                        "your friends survived in"
+                    ].includes(newValue)) {
+                    this.showClose = true
+                }
+            }
         }
     }
 </script>
@@ -133,5 +165,13 @@
         border-bottom: 20px solid transparent;
         left: 32px;
         bottom: -24px;
+    }
+
+    #close {
+        padding: 10px;
+        background: red;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
     }
 </style>

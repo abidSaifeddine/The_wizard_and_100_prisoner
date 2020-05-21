@@ -43,6 +43,9 @@
         name: "CodeArea",
         methods: {
             submit() {
+                if(!this.code)
+                    alert("Code area shouldn't be empty");
+                else
                 // an event that holds arguments = {variables, code} that the App.vue component will receive and evaluate
                 EventBus.$emit('submit', {variables: this.variables, code: this.code})
             }
