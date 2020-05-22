@@ -17,7 +17,7 @@
         <ul>
             <li>It will be a loop, on each iteration,
                 a prisoner goes to the room randomly and you can make him change the status of the switch
-                by calling the <b>switchSwitch(prisonerInRoom.index) function</b>, this function will also set the
+                by calling the <b>switchSwitch(prisonerInRoom) function</b>, this function will also set the
                 prisonerInRoom attribute <b>switched</b> to true
             </li>
             <li>Your code will be included in this loop, on each iteration you will have access to prisonerInRoom = {

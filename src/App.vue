@@ -139,7 +139,7 @@
                 //The function that will turn on or off the switch and do the secret counting
                 // eslint-disable-next-line no-unused-vars
                 function switchSwitch(prisoner) {
-                    prisoners[prisoner].switched = true;
+                    prisoners[prisoner.index].switched = true;
                     the_game_s_counter++;
                     _switch = !_switch;
                 }
