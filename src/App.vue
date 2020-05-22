@@ -254,8 +254,14 @@
 
         created() {
             //Preventing the user from screening the application code
-            console.log = function () {
-            }
+            console.log = function () {};
+            console.error = function () {};
+            console.warn = function () {};
+            console.group = function () {};
+            console.groupCollapsed = function () {};
+            console.info = function () {};
+            console.table = function () {};
+            console.trace = function () {};
         }
     }
 </script>
