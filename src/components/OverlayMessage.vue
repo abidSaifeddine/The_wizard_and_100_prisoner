@@ -49,11 +49,12 @@
             //Show close button when result comes out
             content: function (newValue) {
                 if (
-                    ["Timeout, you never asked the question",
-                        "Either you cheated or your strategy is wrong",
-                        "your friends died in",
-                        "You cheated!!!",
-                        "your friends survived in"
+                    [
+                        'Timeout, you never asked the question',
+                        'Either you cheated or your strategy is wrong',
+                        'your friends died in',
+                        'You cheated!!!',
+                        'your friends survived in'
                     ].includes(newValue)) {
                     this.showClose = true
                 }

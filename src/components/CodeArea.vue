@@ -11,7 +11,7 @@
         </ul>
         <div class="box">
             <h3>Your variables goes here</h3>
-            <textarea v-model="variables" name="comment" id="vars" placeholder="ex: variables.x = 2;"
+            <textarea v-model="variables" name="comment" id="vars" placeholder="ex: vs.x = 2;"
                       style="min-height: 4rem"></textarea>
         </div>
         <ul>

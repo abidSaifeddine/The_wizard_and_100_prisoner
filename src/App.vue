@@ -148,7 +148,7 @@
                 // eslint-disable-next-line no-unused-vars
                 function release() {
                     //this will stop the random picking
-                    self.releaseCalled = true;
+                    clearInterval(prisonersLoop);
                     /**
                      *the_game_s_counter should be 198 : The counter prisoner must of had switched the switch 99 times
                      * Other prisoner must turn on the switch 99 times, each prisoner does the action only once
@@ -158,11 +158,11 @@
                      * if the_game_s_counter variables is greater than 198 ==> something is wrong
                      */
                     if (the_game_s_counter === 198 && prisoners.every((e) => e.switched === true)) {
-                        self.content = `your friends survived in`;
+                        self.content = 'your friends survived in';
                     } else if (the_game_s_counter <= 198 && prisoners.every((e) => e.switched === true)) {
-                        self.content = `You cheated!!!`;
+                        self.content = 'You cheated!!!';
                     } else if (the_game_s_counter < 198) {
-                        self.content = `your friends died in`;
+                        self.content = 'your friends died in';
                     } else if (the_game_s_counter > 198) {
                         self.content = 'Either you cheated or your strategy is wrong';
                     }
@@ -193,15 +193,13 @@
 
                 //Loop, one iteration each 10 milliseconds // random prisoner
                 const prisonersLoop = setInterval(function () {
-                    //stopping the loop when the release function is called
-                    if (self.releaseCalled) clearInterval(prisonersLoop);
 
                     //120.000 * 10 milliseconds = 1.200.000 milliseconds = 20minutes
                     // if after 20 minutes the release function is never called, the system will break;
                     if (days === 120000) {
                         clearInterval(prisonersLoop);
                         self.image_src = contents[0].src;
-                        self.content = `Timeout, you never asked the question`;
+                        self.content = 'Timeout, you never asked the question';
                         self.show = true;
                     }
 
@@ -214,14 +212,20 @@
                     days++;
                     //update the ui with the days count
                     EventBus.$emit('days', days);
-                    console.log(prisonerIndex, the_game_s_counter, days);
+                    //console.log(prisonerIndex, the_game_s_counter, days);
 
                     //eval user's code
                     try {
                         eval(args.code);
                     } catch (e) {
                         //check for user's code errors
-                        if (e instanceof SyntaxError || e instanceof EvalError || e instanceof RangeError || e instanceof ReferenceError) {
+                        if (
+                            e instanceof SyntaxError ||
+                            e instanceof EvalError ||
+                            e instanceof RangeError ||
+                            e instanceof ReferenceError
+                            )
+                        {
                             self.show = false;
                             clearInterval(prisonersLoop);
                             alert(e.message);
@@ -251,8 +255,8 @@
 
         created() {
             //Preventing the user from screening the application code
-            console.log = function () {
-            }
+            // console.log = function () {
+            // }
         }
     }
 </script>
