@@ -212,7 +212,6 @@
                     days++;
                     //update the ui with the days count
                     EventBus.$emit('days', days);
-                    //console.log(prisonerIndex, the_game_s_counter, days);
 
                     //eval user's code
                     try {
@@ -255,8 +254,8 @@
 
         created() {
             //Preventing the user from screening the application code
-            // console.log = function () {
-            // }
+            console.log = function () {
+            }
         }
     }
 </script>
